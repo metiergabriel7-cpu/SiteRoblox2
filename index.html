@@ -30,16 +30,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 #particles-container{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .particle{position:absolute;border-radius:1px;animation:particleDrift linear infinite;opacity:0;}
 @keyframes particleDrift{0%{opacity:0;transform:translateY(100vh) rotate(0)}10%{opacity:.9}90%{opacity:.2}100%{opacity:0;transform:translateY(-10vh) translateX(var(--dx)) rotate(180deg)}}
-
-/* LOADING SCREEN */
 #loading-screen{position:fixed;inset:0;background:#050810;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .5s;}
 #loading-screen.done{opacity:0;pointer-events:none;}
 .loading-logo{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--studio);letter-spacing:4px;}
 .loading-bar-wrap{width:260px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
 .loading-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--studio));border-radius:2px;width:0%;transition:width .3s ease;}
 .loading-txt{font-size:11px;color:var(--text2);font-family:'Rajdhani',sans-serif;letter-spacing:2px;text-transform:uppercase;}
-
-/* BAN SCREEN */
 .ban-screen{position:fixed;inset:0;background:#030508;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
 .ban-screen.hidden{display:none;}
 .ban-icon{font-size:80px;animation:shake .4s ease;}
@@ -48,8 +44,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .ban-msg{font-size:16px;color:var(--text2);font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;text-align:center;max-width:420px;line-height:1.8;}
 .ban-reason-box{background:rgba(255,51,102,.08);border:1px solid rgba(255,51,102,.3);border-radius:12px;padding:16px 28px;font-size:14px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:700;text-align:center;}
 .ban-code{font-size:11px;color:var(--text3);font-family:'Orbitron',sans-serif;letter-spacing:3px;margin-top:10px;}
-
-/* AUTOSAVE */
 .autosave-dot{position:fixed;bottom:80px;left:26px;z-index:200;display:flex;align-items:center;gap:7px;padding:6px 12px;background:rgba(9,13,30,.88);border:1px solid var(--border2);border-radius:20px;font-size:10px;font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(8px);transition:all .3s;}
 .autosave-dot.saving{border-color:var(--gold);color:var(--gold);}
 .autosave-dot.saved{border-color:var(--green);color:var(--green);}
@@ -59,8 +53,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .autosave-dot.saved .as-pulse{background:var(--green);}
 .autosave-dot.error .as-pulse{background:var(--red);}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
-
-/* EVENT BANNER */
 #event-banner-wrap{position:fixed;top:0;left:0;right:0;z-index:500;display:none;}
 #event-banner-wrap.show{display:block;}
 .event-banner{background:linear-gradient(90deg,rgba(255,102,0,.18),rgba(255,204,0,.13),rgba(255,102,0,.18));border-bottom:2px solid rgba(255,204,0,.4);padding:12px 48px;text-align:center;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:1px;backdrop-filter:blur(10px);animation:bannerSlide .4s ease;}
@@ -69,12 +61,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .event-banner .eb-close:hover{background:rgba(255,51,102,.2);color:var(--red);border-color:var(--red);}
 .banner-spacer{height:0;transition:height .3s;}
 .banner-spacer.show{height:48px;}
-
-/* TOPBAR */
 .topbar{position:relative;z-index:10;background:linear-gradient(90deg,transparent,rgba(79,143,255,.12),rgba(0,180,216,.08),transparent);border-bottom:1px solid rgba(79,143,255,.18);padding:9px 32px;text-align:center;font-size:12px;color:var(--text2);letter-spacing:1px;font-family:'Rajdhani',sans-serif;font-weight:600;}
 .topbar .hl{color:var(--studio);}.topbar .hl2{color:var(--gold);}
-
-/* NAV */
 nav{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:0 36px;height:66px;display:flex;align-items:center;justify-content:space-between;}
 .nav-logo-wrap{display:flex;align-items:center;gap:14px;}
 .nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--studio));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(79,143,255,.4);}
@@ -91,8 +79,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.88);backdrop-filte
 .fav-nav-btn:hover{border-color:var(--gold);background:rgba(255,204,0,.06);}
 .fav-nav-count{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#000;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;}
 .fav-nav-count.show{display:flex;}
-
-/* HERO */
 .hero{position:relative;z-index:1;padding:90px 36px 70px;text-align:center;overflow:hidden;}
 .hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 22px;background:rgba(79,143,255,.08);border:1px solid rgba(79,143,255,.28);border-radius:100px;font-size:11px;font-weight:700;color:var(--studio);letter-spacing:3px;text-transform:uppercase;font-family:'Rajdhani',sans-serif;margin-bottom:28px;animation:fadeUp .7s ease both;}
 .badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:pulse 2s ease infinite;}
@@ -197,8 +183,6 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .card-rating{display:flex;align-items:center;gap:5px;margin-bottom:10px;}
 .rating-stars{font-size:11px;color:var(--gold);}
 .rating-count{font-size:10px;color:var(--text3);font-family:'Rajdhani',sans-serif;}
-
-/* MODAL IMAGE GALLERY */
 .modal-gallery{position:relative;width:100%;border-radius:11px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border);background:var(--surface2);}
 .gallery-main{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
 .gallery-main img{width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
@@ -216,8 +200,6 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .gallery-thumbs::-webkit-scrollbar{height:3px;}
 .gallery-thumbs::-webkit-scrollbar-track{background:transparent;}
 .gallery-thumbs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-
-/* PACKS */
 .section-divider{display:flex;align-items:center;gap:16px;margin-bottom:44px;}
 .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
 .divider-icon{font-size:18px;color:var(--border2);}
@@ -248,13 +230,9 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .btn-pack-pro:hover{box-shadow:0 0 30px rgba(255,204,0,.5);}
 .btn-pack-ultimate{background:linear-gradient(135deg,var(--purple),#6633cc);color:#fff;}
 .btn-pack-ultimate:hover{box-shadow:0 0 30px rgba(153,102,255,.5);}
-
-/* TOAST */
 .toast-container{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:500;display:flex;flex-direction:column;gap:8px;align-items:center;}
 .toast{background:rgba(9,13,30,.96);border:1px solid var(--studio);border-radius:10px;padding:12px 24px;font-size:13px;font-weight:600;color:var(--text);backdrop-filter:blur(20px);animation:toastIn .3s ease;white-space:nowrap;box-shadow:0 0 30px rgba(79,143,255,.25);}
 @keyframes toastIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-/* MODALS */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
 .modal-overlay.show{opacity:1;pointer-events:all;}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;max-width:600px;width:92%;max-height:90vh;overflow-y:auto;transform:scale(.93);transition:transform .3s;}
@@ -318,8 +296,6 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .favs-empty{text-align:center;padding:60px 20px;color:var(--text2);}
 .favs-empty-icon{font-size:52px;margin-bottom:16px;}
 .favs-empty-txt{font-size:14px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;}
-
-/* ADMIN */
 .admin-trigger{position:fixed;bottom:26px;right:26px;z-index:200;width:46px;height:46px;border-radius:10px;background:rgba(153,102,255,.15);border:1px solid var(--purple);display:flex;align-items:center;justify-content:center;cursor:none;transition:all .3s;font-size:20px;backdrop-filter:blur(10px);}
 .admin-trigger:hover{background:rgba(153,102,255,.35);box-shadow:0 0 24px rgba(153,102,255,.5);}
 .admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:600;display:flex;align-items:stretch;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .3s;}
@@ -470,6 +446,9 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .pi-btn-del{background:transparent;color:var(--text3);border:1px solid var(--border);}
 .pi-btn-del:hover{color:var(--red);border-color:var(--red);}
 .no-items-msg{text-align:center;padding:40px;color:var(--text2);font-family:'Rajdhani',sans-serif;font-size:13px;}
+.storage-mode-badge{position:fixed;bottom:26px;left:26px;z-index:200;padding:4px 10px;border-radius:6px;font-size:9px;font-family:'Rajdhani',sans-serif;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;backdrop-filter:blur(8px);}
+.storage-mode-badge.cloud{background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.3);color:var(--studio);}
+.storage-mode-badge.local{background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.3);color:var(--gold);}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36px;text-align:center;background:rgba(9,13,30,.6);}
@@ -484,14 +463,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
 <div id="loading-screen">
   <div class="loading-logo">RBX STUDIO</div>
   <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  <div class="loading-txt" id="loading-txt">Chargement des données...</div>
+  <div class="loading-txt" id="loading-txt">Initialisation...</div>
 </div>
 
-<!-- BAN SCREEN -->
 <div class="ban-screen hidden" id="ban-screen">
   <div class="ban-icon">🚫</div>
   <div class="ban-title">ACCÈS REFUSÉ</div>
@@ -507,7 +484,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 <div class="blueprint-lines" id="blueprint-lines"></div>
 <div id="particles-container"></div>
 <div class="toast-container" id="toasts"></div>
-<div class="autosave-dot" id="autosave-dot"><div class="as-pulse"></div><span id="autosave-txt">Cloud sync</span></div>
+<div class="autosave-dot" id="autosave-dot" style="bottom:56px"><div class="as-pulse"></div><span id="autosave-txt">Sync</span></div>
+<div class="storage-mode-badge" id="storage-mode-badge">...</div>
 
 <div id="event-banner-wrap">
   <div class="event-banner" style="position:relative;">
@@ -697,10 +675,81 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  RBXS — SYSTÈME DE SAUVEGARDE PERSISTANTE (window.storage)
-//  Les données sont sauvegardées côté serveur et accessibles
-//  depuis n'importe quel navigateur / appareil.
+//  SYSTÈME DE STOCKAGE HYBRIDE
+//  Priorité : window.storage (artefact Claude) → localStorage (navigateur)
+//  Fonctionne sur TOUTES les plateformes sans erreur.
 // ══════════════════════════════════════════════════════════════
+
+var STORAGE_MODE = 'local'; // sera mis à jour après détection
+
+// ─── DÉTECTION AUTOMATIQUE DU BACKEND ───
+function detectStorageBackend() {
+  if (typeof window !== 'undefined' &&
+      window.storage &&
+      typeof window.storage.get === 'function' &&
+      typeof window.storage.set === 'function') {
+    STORAGE_MODE = 'cloud';
+    return true;
+  }
+  STORAGE_MODE = 'local';
+  return false;
+}
+
+// ─── API UNIFIÉE ───
+async function sGet(key) {
+  if (STORAGE_MODE === 'cloud') {
+    try {
+      var r = await window.storage.get(key);
+      if (r && r.value !== undefined && r.value !== null) {
+        return JSON.parse(r.value);
+      }
+      return null;
+    } catch(e) {
+      // fallback local si erreur cloud
+      return localGet(key);
+    }
+  } else {
+    return localGet(key);
+  }
+}
+
+async function sSet(key, val) {
+  if (STORAGE_MODE === 'cloud') {
+    try {
+      await window.storage.set(key, JSON.stringify(val));
+      return true;
+    } catch(e) {
+      // fallback local si erreur cloud
+      return localSet(key, val);
+    }
+  } else {
+    return localSet(key, val);
+  }
+}
+
+async function sDelete(key) {
+  if (STORAGE_MODE === 'cloud') {
+    try { await window.storage.delete(key); } catch(e) {}
+  }
+  try { localStorage.removeItem(key); } catch(e) {}
+}
+
+function localGet(key) {
+  try {
+    var v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : null;
+  } catch(e) { return null; }
+}
+
+function localSet(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+    return true;
+  } catch(e) {
+    console.warn('localStorage write error:', e);
+    return false;
+  }
+}
 
 // ─── CLÉS DE STOCKAGE ───
 var KEYS = {
@@ -721,11 +770,11 @@ var KEYS = {
 
 // ─── DONNÉES PAR DÉFAUT ───
 var DEFAULT_PRODUCTS = [
-  {id:1,cat:'batiment',title:'Centre Commercial Premium',descShort:'Mall 2 étages avec boutiques, food court et parkings intégrés.',descLong:'Ce centre commercial ultra-détaillé comprend 2 niveaux intégralement modélisés avec escalators, ascenseurs, food court central et 12 boutiques indépendantes configurables. Parfait pour les jeux de type ville roleplay ou simulation commerciale.',descTech:'Compatible R15 · Anchored · CanCollide activé · LOD optimisé · Pas de scripts inclus',descIncluded:'Fichier .rbxm prêt à importer\nTextues HD intégrées\n12 boutiques vides configurables\nParking extérieur 40 places\nFood court avec tables',specs:['2 étages','12 boutiques','Parking'],price:800,old:1200,badge:'hot',images:[],emoji:'🏬',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:2,cat:'batiment',title:'Station-Service Ultra',descShort:'Station complète avec pompes, mini-market et zone de lavage.',descLong:'Station-service réaliste avec 4 pompes à carburant animées, un mini-market intérieur complet avec rayons et caisse, et une zone de lavage automatique. Idéal pour les jeux de simulation de vie ou de voitures.',descTech:'Compatible R15 · Anchored · Pompes animées par script optionnel · Optimisé mobile',descIncluded:'Fichier .rbxm complet\n4 pompes (design réaliste)\nMini-market intérieur\nCar wash animé\nEnseignes lumineuses',specs:['4 pompes','Mini-market','Car wash'],price:500,old:null,badge:'new',images:[],emoji:'⛽',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:3,cat:'batiment',title:'Fast-Food Drive',descShort:'Restaurant fast-food avec drive-through et enseigne animée.',descLong:'Fast-food moderne style burger avec drive-through intégré, terrasse extérieure, intérieur avec tables et comptoir détaillé. Enseigne néon animée incluse.',descTech:'Compatible R15 · Anchored · Néon script inclus · ~850 parts',descIncluded:'Fichier .rbxm\nIntérieur + extérieur\nDrive-through complet\nEnseignes néon\nTerrasse',specs:['Drive-through','Terrasse','Néon'],price:400,old:null,badge:null,images:[],emoji:'🍔',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:4,cat:'batiment',title:'Entrepôt Industriel',descShort:'Grand entrepôt avec quai de chargement et parking PL.',descLong:'Entrepôt industriel grande échelle avec quai de chargement surélevé, zone de stationnement pour poids lourds, portail sécurisé et intérieur vide modulable.',descTech:'Compatible R15 · Anchored · Intérieur vide · ~1200 parts',descIncluded:'Fichier .rbxm\nQuai de chargement\nParking PL 8 places\nPortail coulissant\nClôture périmétrique',specs:['Quai chargement','Parking PL','Sécurité'],price:550,old:750,badge:'sale',images:[],emoji:'🏭',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:5,cat:'batiment',title:'Boutique Moderne',descShort:'Petite boutique tendance avec vitrine illuminée.',descLong:'Boutique tendance avec grande vitrine illuminée, intérieur avec présentoirs, comptoir et cabine d\'essayage. Style contemporain.',descTech:'Compatible R15 · Anchored · ~400 parts · Vitrine avec émissive lighting',descIncluded:'Fichier .rbxm\nVitrine illuminée\nIntérieur avec présentoirs\nComptoir caisse\nCabine d\'essayage',specs:['Vitrine illuminée','2 pièces','Optimisé'],price:300,old:null,badge:null,images:[],emoji:'🏪',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:1,cat:'batiment',title:'Centre Commercial Premium',descShort:'Mall 2 étages avec boutiques, food court et parkings intégrés.',descLong:'Ce centre commercial ultra-détaillé comprend 2 niveaux intégralement modélisés avec escalators, ascenseurs, food court central et 12 boutiques indépendantes configurables.',descTech:'Compatible R15 · Anchored · CanCollide activé · LOD optimisé',descIncluded:'Fichier .rbxm prêt à importer\nTextures HD intégrées\n12 boutiques vides configurables\nParking extérieur 40 places\nFood court avec tables',specs:['2 étages','12 boutiques','Parking'],price:800,old:1200,badge:'hot',images:[],emoji:'🏬',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:2,cat:'batiment',title:'Station-Service Ultra',descShort:'Station complète avec pompes, mini-market et zone de lavage.',descLong:'Station-service réaliste avec 4 pompes à carburant animées, un mini-market intérieur complet et une zone de lavage automatique.',descTech:'Compatible R15 · Anchored · Pompes animées par script optionnel',descIncluded:'Fichier .rbxm complet\n4 pompes design réaliste\nMini-market intérieur\nCar wash animé\nEnseignes lumineuses',specs:['4 pompes','Mini-market','Car wash'],price:500,old:null,badge:'new',images:[],emoji:'⛽',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:3,cat:'batiment',title:'Fast-Food Drive',descShort:'Restaurant fast-food avec drive-through et enseigne animée.',descLong:'Fast-food moderne style burger avec drive-through intégré, terrasse extérieure et intérieur avec tables et comptoir détaillé.',descTech:'Compatible R15 · Anchored · Néon script inclus · ~850 parts',descIncluded:'Fichier .rbxm\nIntérieur + extérieur\nDrive-through complet\nEnseignes néon\nTerrasse',specs:['Drive-through','Terrasse','Néon'],price:400,old:null,badge:null,images:[],emoji:'🍔',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:4,cat:'batiment',title:'Entrepôt Industriel',descShort:'Grand entrepôt avec quai de chargement et parking PL.',descLong:'Entrepôt industriel grande échelle avec quai de chargement surélevé et zone de stationnement pour poids lourds.',descTech:'Compatible R15 · Anchored · Intérieur vide · ~1200 parts',descIncluded:'Fichier .rbxm\nQuai de chargement\nParking PL 8 places\nPortail coulissant\nClôture périmétrique',specs:['Quai chargement','Parking PL','Sécurité'],price:550,old:750,badge:'sale',images:[],emoji:'🏭',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:5,cat:'batiment',title:'Boutique Moderne',descShort:'Petite boutique tendance avec vitrine illuminée.',descLong:'Boutique tendance avec grande vitrine illuminée, intérieur avec présentoirs, comptoir et cabine d\'essayage.',descTech:'Compatible R15 · Anchored · ~400 parts · Vitrine avec émissive lighting',descIncluded:'Fichier .rbxm\nVitrine illuminée\nIntérieur avec présentoirs\nComptoir caisse\nCabine d\'essayage',specs:['Vitrine illuminée','2 pièces','Optimisé'],price:300,old:null,badge:null,images:[],emoji:'🏪',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
 ];
 var DEFAULT_PACKS = [
   {id:'starter',tier:'starter',title:'City Starter',sub:'Parfait pour commencer une ville',items:['Centre Commercial Standard','Station-Service Classique','Fast-Food Drive','Support Discord'],price:1800,old:2400,savings:'25',link:'https://discord.gg/votre-lien'},
@@ -733,58 +782,30 @@ var DEFAULT_PACKS = [
   {id:'ultimate',tier:'ultimate',title:'City Builder Ultimate',sub:'TOUS les bâtiments et exclusifs',items:['TOUS les bâtiments','3 bâtiments exclusifs','Support VIP 1h','Mises à jour à vie','Accès beta'],price:5500,old:9000,savings:'40',link:'https://discord.gg/votre-lien'},
 ];
 
-// ─── STATE EN MÉMOIRE (rempli depuis window.storage au démarrage) ───
-var PRODUCTS = [];
-var PACKS = [];
-var EVENTS = [];
-var REPORTS = [];
-var REVIEWS = {};
-var BANS = [];
-var PROBLEMS = [];
-var FAVORITES = [];
-var PURCHASED = [];
-var ADMIN_PASSWORD = 'admin123';
-var ADMIN_PIN = '1234';
-var USER_ID = '';
-
-// ─── HELPERS STORAGE ASYNC ───
-async function sGet(key) {
-  try {
-    var r = await window.storage.get(key);
-    if (r && r.value) return JSON.parse(r.value);
-  } catch(e) {}
-  return null;
-}
-async function sSet(key, val) {
-  try {
-    await window.storage.set(key, JSON.stringify(val));
-    return true;
-  } catch(e) {
-    console.error('Storage write error:', e);
-    return false;
-  }
-}
+// ─── STATE ───
+var PRODUCTS=[], PACKS=[], EVENTS=[], REPORTS=[], REVIEWS={}, BANS=[], PROBLEMS=[];
+var FAVORITES=[], PURCHASED=[];
+var ADMIN_PASSWORD='admin123', ADMIN_PIN='1234', USER_ID='';
 
 // ─── CHARGEMENT INITIAL ───
 async function loadAllData() {
-  setLoading(10, 'Connexion au cloud...');
+  detectStorageBackend();
+  updateStorageBadge();
 
-  // UID utilisateur (persistant)
+  setLoading(10, 'Détection du stockage...');
+
+  // UID
   var uid = await sGet(KEYS.uid);
-  if (uid) {
-    USER_ID = uid;
-  } else {
-    USER_ID = 'user_' + Math.random().toString(36).substr(2, 9);
-    await sSet(KEYS.uid, USER_ID);
-  }
+  if (uid) { USER_ID = uid; }
+  else { USER_ID = 'user_' + Math.random().toString(36).substr(2,9); await sSet(KEYS.uid, USER_ID); }
 
   setLoading(25, 'Chargement des produits...');
   var prods = await sGet(KEYS.products);
-  PRODUCTS = prods || DEFAULT_PRODUCTS.map(function(p){ return Object.assign({}, p); });
+  PRODUCTS = prods || DEFAULT_PRODUCTS.map(function(p){ return Object.assign({},p); });
 
   setLoading(40, 'Chargement des packs...');
   var pks = await sGet(KEYS.packs);
-  PACKS = pks || DEFAULT_PACKS.map(function(p){ return Object.assign({}, p); });
+  PACKS = pks || DEFAULT_PACKS.map(function(p){ return Object.assign({},p); });
 
   setLoading(55, 'Chargement des événements...');
   EVENTS    = (await sGet(KEYS.events))    || [];
@@ -812,6 +833,18 @@ async function loadAllData() {
   initApp();
 }
 
+function updateStorageBadge() {
+  var b = document.getElementById('storage-mode-badge');
+  if (!b) return;
+  if (STORAGE_MODE === 'cloud') {
+    b.className = 'storage-mode-badge cloud';
+    b.textContent = '☁ Cloud sync';
+  } else {
+    b.className = 'storage-mode-badge local';
+    b.textContent = '💾 Local storage';
+  }
+}
+
 function setLoading(pct, txt) {
   document.getElementById('loading-bar').style.width = pct + '%';
   document.getElementById('loading-txt').textContent = txt;
@@ -819,47 +852,36 @@ function setLoading(pct, txt) {
 function hideLoading() {
   var ls = document.getElementById('loading-screen');
   ls.classList.add('done');
-  setTimeout(function(){ ls.style.display = 'none'; }, 600);
+  setTimeout(function(){ ls.style.display='none'; }, 600);
 }
 
-// ─── SAUVEGARDE ───
-var _saveQueue = {};
-var _saveTimer = null;
-
+// ─── SAUVEGARDE AVEC DEBOUNCE ───
+var _saveQueue = {}, _saveTimer = null;
 function scheduleSave(key, value) {
   _saveQueue[key] = value;
   if (_saveTimer) clearTimeout(_saveTimer);
   _saveTimer = setTimeout(flushSave, 800);
 }
-
 async function flushSave() {
   var dot = document.getElementById('autosave-dot');
   var txt = document.getElementById('autosave-txt');
   dot.className = 'autosave-dot saving';
-  txt.textContent = 'Sauvegarde cloud...';
-
-  var keys = Object.keys(_saveQueue);
-  var all_ok = true;
-  for (var i = 0; i < keys.length; i++) {
-    var ok = await sSet(keys[i], _saveQueue[keys[i]]);
-    if (!ok) all_ok = false;
+  txt.textContent = STORAGE_MODE==='cloud' ? 'Cloud...' : 'Local...';
+  var keys = Object.keys(_saveQueue), ok = true;
+  for (var i=0; i<keys.length; i++) {
+    var r = await sSet(keys[i], _saveQueue[keys[i]]);
+    if (!r) ok = false;
   }
   _saveQueue = {};
-
-  if (all_ok) {
+  if (ok) {
     dot.className = 'autosave-dot saved';
-    txt.textContent = '☁ Sauvegardé !';
+    txt.textContent = STORAGE_MODE==='cloud' ? '☁ Sauvegardé' : '💾 Sauvegardé';
   } else {
     dot.className = 'autosave-dot error';
-    txt.textContent = '⚠ Erreur cloud';
+    txt.textContent = '⚠ Erreur save';
   }
-  setTimeout(function(){
-    dot.className = 'autosave-dot';
-    txt.textContent = '☁ Cloud sync';
-  }, 2500);
+  setTimeout(function(){ dot.className='autosave-dot'; txt.textContent='Sync'; }, 2500);
 }
-
-// Sauvegarde une entité spécifique
 function saveProducts()  { scheduleSave(KEYS.products,  PRODUCTS);  }
 function savePacks()     { scheduleSave(KEYS.packs,     PACKS);     }
 function saveEvents()    { scheduleSave(KEYS.events,    EVENTS);    }
@@ -872,11 +894,11 @@ function savePurchased() { scheduleSave(KEYS.purchased, PURCHASED); }
 
 // ─── BAN CHECK ───
 function checkBan() {
-  var ban = BANS.find(function(b){ return b.uid === USER_ID && b.active; });
+  var ban = BANS.find(function(b){ return b.uid===USER_ID && b.active; });
   if (ban) {
     document.getElementById('ban-screen').classList.remove('hidden');
-    var exp = ban.duration === 'permanent' ? 'Permanent' : 'Expire le ' + ban.expiry;
-    document.getElementById('ban-reason-txt').textContent = 'Raison : ' + (ban.reason||'Non spécifiée') + ' · ' + exp;
+    var exp = ban.duration==='permanent' ? 'Permanent' : 'Expire le '+ban.expiry;
+    document.getElementById('ban-reason-txt').textContent = 'Raison : '+(ban.reason||'Non spécifiée')+' · '+exp;
   }
 }
 
@@ -928,7 +950,7 @@ function updateFavCount(){
   c.className='fav-nav-count'+(FAVORITES.length>0?' show':'');
 }
 
-// ─── GALLERY STATE ───
+// ─── GALLERY ───
 var galleryCurrentIdx=0,galleryImages=[];
 function buildGallery(pr){
   var imgs=(pr.images&&pr.images.length>0)?pr.images:(pr.img?[pr.img]:[]);
@@ -966,7 +988,7 @@ function refreshEventBanner(){
 }
 function closeBanner(){document.getElementById('event-banner-wrap').classList.remove('show');document.getElementById('banner-spacer').classList.remove('show');document.getElementById('banner-spacer').style.height='0';}
 
-// ─── FILTER BAR ───
+// ─── FILTER ───
 var currentFilter='all';
 function renderFilter(){
   var cats=getCatAll(),html='';
@@ -1056,7 +1078,7 @@ function renderPacks(){
   observeAll();
 }
 
-// ─── MODAL TEXT TABS ───
+// ─── MODAL TABS ───
 function switchModalTab(tab){
   document.querySelectorAll('.mtab').forEach(function(b){b.classList.remove('active');});
   document.querySelectorAll('.modal-text-panel').forEach(function(p){p.classList.remove('active');});
@@ -1262,7 +1284,9 @@ function showEditForm(pr){
   var badgeOpts='<option value="">Aucun</option><option value="new"'+(pr.badge==='new'?' selected':'')+'>NEW</option><option value="hot"'+(pr.badge==='hot'?' selected':'')+'>HOT</option><option value="sale"'+(pr.badge==='sale'?' selected':'')+'>PROMO</option><option value="exclusive"'+(pr.badge==='exclusive'?' selected':'')+'>EXCLUSIF</option>';
   var imgs=pr.images||[];
   var imgListHtml=imgs.map(function(url,i){
-    return'<div class="img-row"><img class="img-row-thumb" src="'+url+'" onerror="this.style.display=\'none\'"/><span class="img-row-url">'+url.substring(0,70)+'</span><button class="img-row-del" onclick="removeEditImg('+i+')">✕</button></div>';
+    var isBase64=url.startsWith('data:');
+    var label=isBase64?'[Image locale — '+Math.round(url.length/1024)+'KB]':url.substring(0,70);
+    return'<div class="img-row"><img class="img-row-thumb" src="'+url+'" onerror="this.style.display=\'none\'"/><span class="img-row-url">'+label+'</span><button class="img-row-del" onclick="removeEditImg('+i+')">✕</button></div>';
   }).join('');
   document.getElementById('edit-form-wrap').innerHTML=
     '<div class="edit-form show">'
@@ -1275,8 +1299,8 @@ function showEditForm(pr){
       +'<div class="form-group"><div class="form-label">Badge</div><select class="form-select" id="ef-badge">'+badgeOpts+'</select></div>'
       +'<div class="form-group"><div class="form-label">Prix Robux</div><input class="form-input" type="number" id="ef-price" value="'+(pr.price||0)+'"/></div>'
       +'<div class="form-group"><div class="form-label">Ancien prix</div><input class="form-input" type="number" id="ef-old" value="'+(pr.old||'')+'"/></div>'
-      +'<div class="form-group full"><div class="form-label" style="color:var(--studio)">📝 Description courte (carte)</div><input class="form-input" id="ef-descShort" value="'+(pr.descShort||pr.desc||'').replace(/"/g,'&quot;')+'"/></div>'
-      +'<div class="form-group full"><div class="form-label" style="color:var(--accent)">📄 Description longue (modal)</div><textarea class="form-textarea" id="ef-descLong" style="min-height:90px;">'+(pr.descLong||pr.desc||'')+'</textarea></div>'
+      +'<div class="form-group full"><div class="form-label" style="color:var(--studio)">📝 Description courte</div><input class="form-input" id="ef-descShort" value="'+(pr.descShort||pr.desc||'').replace(/"/g,'&quot;')+'"/></div>'
+      +'<div class="form-group full"><div class="form-label" style="color:var(--accent)">📄 Description longue</div><textarea class="form-textarea" id="ef-descLong" style="min-height:90px;">'+(pr.descLong||pr.desc||'')+'</textarea></div>'
       +'<div class="form-group full"><div class="form-label" style="color:var(--purple)">⚙ Infos techniques</div><textarea class="form-textarea" id="ef-descTech" style="min-height:60px;">'+(pr.descTech||'')+'</textarea></div>'
       +'<div class="form-group full"><div class="form-label" style="color:var(--green)">📦 Contenu inclus (1 item par ligne)</div><textarea class="form-textarea" id="ef-descIncluded" style="min-height:80px;">'+(pr.descIncluded||'')+'</textarea></div>'
       +'<div class="form-group"><div class="form-label">Spec 1</div><input class="form-input" id="ef-spec1" value="'+(pr.specs&&pr.specs[0]?pr.specs[0]:'')+'"/></div>'
@@ -1286,10 +1310,10 @@ function showEditForm(pr){
       +'<div class="form-group full"><div class="form-label" style="color:var(--studio)">🎫 Lien Pass</div><input class="form-input" id="ef-linkPass" value="'+(pr.linkPass||'')+'" style="border-color:rgba(0,180,216,.3)"/></div>'
       +'<div class="form-group full"><div class="form-label" style="color:var(--purple)">🔌 Lien Plugin</div><input class="form-input" id="ef-linkPlugin" value="'+(pr.linkPlugin||'')+'" style="border-color:rgba(153,102,255,.3)"/></div>'
       +'<div class="form-group full"><div class="images-section">'
-        +'<div class="images-section-title">📷 Galerie photos (images sauvegardées en cloud)</div>'
+        +'<div class="images-section-title">📷 Galerie photos</div>'
         +'<div class="img-list" id="edit-img-list">'+imgListHtml+'</div>'
-        +'<div class="add-img-row"><input class="form-input" id="ef-img-new" placeholder="https://i.imgur.com/... — coller URL puis Ajouter"/><button class="btn-add-img" onclick="addEditImgUrl()">+ Ajouter URL</button></div>'
-        +'<div class="upload-row"><div class="img-upload-area" style="flex:1"><input type="file" accept="image/*" multiple onchange="handleMultiImgUpload(this)"/><div class="img-upload-label">📤 Upload depuis ton PC (converti en base64 et sauvegardé)</div></div></div>'
+        +'<div class="add-img-row"><input class="form-input" id="ef-img-new" placeholder="https://i.imgur.com/..."/><button class="btn-add-img" onclick="addEditImgUrl()">+ URL</button></div>'
+        +'<div class="upload-row"><div class="img-upload-area" style="flex:1"><input type="file" accept="image/*" multiple onchange="handleMultiImgUpload(this)"/><div class="img-upload-label">📤 Upload depuis ton PC</div></div></div>'
       +'</div></div>'
     +'</div>'
     +'<div class="form-actions"><button class="btn-save" onclick="saveProduct(\''+pr.id+'\')">💾 Sauvegarder</button><button class="btn-cancel" onclick="cancelEdit()">Annuler</button></div>'
@@ -1361,7 +1385,7 @@ function saveProduct(id){
   editingId=null;window._editImgs=[];
   saveProducts();
   renderFilter();renderProducts();
-  showToast('✅ Produit sauvegardé dans le cloud !','var(--green)');
+  showToast('✅ Produit sauvegardé !','var(--green)');
   renderAdminProducts();
 }
 function cancelEdit(){editingId=null;window._editImgs=[];document.getElementById('edit-form-wrap').innerHTML='';rebuildProductList();}
@@ -1568,7 +1592,7 @@ function renderAdminSettings(){
       +'<div class="settings-title">🔐 Sécurité admin</div>'
       +'<div class="form-grid">'
         +'<div class="form-group"><div class="form-label">Nouveau mot de passe</div><input class="form-input" type="password" id="set-pwd"/></div>'
-        +'<div class="form-group"><div class="form-label">Confirmer mot de passe</div><input class="form-input" type="password" id="set-pwd2"/></div>'
+        +'<div class="form-group"><div class="form-label">Confirmer</div><input class="form-input" type="password" id="set-pwd2"/></div>'
         +'<div class="form-group"><div class="form-label">Nouveau PIN (4 chiffres)</div><input class="form-input" type="password" id="set-pin" maxlength="4"/></div>'
         +'<div class="form-group"><div class="form-label">Confirmer PIN</div><input class="form-input" type="password" id="set-pin2" maxlength="4"/></div>'
       +'</div>'
@@ -1580,6 +1604,14 @@ function renderAdminSettings(){
       +'<div class="form-actions" style="margin-top:10px"><button class="btn-save" onclick="saveTopbar()">Appliquer</button></div>'
     +'</div>'
     +'<div class="settings-section">'
+      +'<div class="settings-title">☁ Mode de stockage actuel</div>'
+      +'<div style="font-size:13px;padding:10px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--surface2);font-family:Rajdhani,sans-serif;font-weight:700;">'
+        +(STORAGE_MODE==='cloud'
+          ?'<span style="color:var(--studio)">☁ Cloud (window.storage)</span> — Données synchronisées sur tous tes appareils via Claude.'
+          :'<span style="color:var(--gold)">💾 Local (localStorage)</span> — Données sauvegardées dans ce navigateur uniquement.')
+      +'</div>'
+    +'</div>'
+    +'<div class="settings-section">'
       +'<div class="settings-title">ℹ Statistiques</div>'
       +'<div style="font-size:12px;color:var(--text2);line-height:2.4">'
         +'<div>📦 <b style="color:var(--text)">'+PRODUCTS.length+'</b> produits · ⭐ <b style="color:var(--gold)">'+FAVORITES.length+'</b> favoris</div>'
@@ -1587,7 +1619,6 @@ function renderAdminSettings(){
         +'<div>🚫 <b style="color:var(--orange)">'+BANS.filter(function(b){return b.active;}).length+'</b> bans actifs</div>'
         +'<div>⭐ <b style="color:var(--gold)">'+Object.values(REVIEWS).reduce(function(a,b){return a+b.length;},0)+'</b> avis publiés</div>'
         +'<div>🆔 Ton UID: <span style="color:var(--studio);font-family:monospace">'+USER_ID+'</span></div>'
-        +'<div>☁ Stockage: <span style="color:var(--green)">Cloud persistant (window.storage)</span></div>'
       +'</div>'
     +'</div>'
     +'<div class="settings-section">'
@@ -1606,7 +1637,7 @@ async function saveSecuritySettings(){
   if(pin&&!/^\d{4}$/.test(pin)){showToast('PIN = 4 chiffres','var(--red)');return;}
   if(pwd){ADMIN_PASSWORD=pwd;await sSet(KEYS.adminPwd,pwd);}
   if(pin){ADMIN_PIN=pin;await sSet(KEYS.adminPin,pin);}
-  showToast('Sécurité mise à jour dans le cloud !','var(--green)');
+  showToast('Sécurité mise à jour !','var(--green)');
 }
 async function saveTopbar(){
   var tb=document.getElementById('set-topbar').value;
@@ -1615,15 +1646,18 @@ async function saveTopbar(){
 }
 async function resetPurchases(){PURCHASED=[];await sSet(KEYS.purchased,[]);showToast('Pass effacés','var(--orange)');}
 async function resetAll(){
-  if(!confirm('Reset complet ? Toutes les données cloud seront effacées !'))return;
+  if(!confirm('Reset complet ? Toutes les données seront effacées !'))return;
   var keys=Object.values(KEYS);
-  for(var i=0;i<keys.length;i++){try{await window.storage.delete(keys[i]);}catch(e){}}
+  for(var i=0;i<keys.length;i++){
+    await sDelete(keys[i]);
+  }
   showToast('Reset effectué, rechargement...','var(--red)');
   setTimeout(function(){location.reload();},1500);
 }
 
-// ─── INIT DE L'APP (après chargement des données) ───
+// ─── INIT ───
 function initApp(){
+  updateStorageBadge();
   checkBan();
   updateFavCount();
   renderFilter();
@@ -1636,13 +1670,13 @@ function initApp(){
 // ─── DÉMARRAGE ───
 loadAllData().catch(function(err){
   console.error('Erreur chargement:', err);
-  // Fallback: charger les données par défaut si window.storage indisponible
-  PRODUCTS = DEFAULT_PRODUCTS.map(function(p){ return Object.assign({}, p); });
-  PACKS    = DEFAULT_PACKS.map(function(p){ return Object.assign({}, p); });
-  USER_ID  = 'user_local_' + Math.random().toString(36).substr(2, 9);
+  PRODUCTS = DEFAULT_PRODUCTS.map(function(p){ return Object.assign({},p); });
+  PACKS    = DEFAULT_PACKS.map(function(p){ return Object.assign({},p); });
+  USER_ID  = 'user_fallback_' + Math.random().toString(36).substr(2,9);
+  STORAGE_MODE = 'local';
   hideLoading();
   initApp();
-  showToast('⚠ Mode local — cloud indisponible','var(--orange)');
+  showToast('⚠ Données par défaut chargées','var(--orange)');
 });
 </script>
 </body>
