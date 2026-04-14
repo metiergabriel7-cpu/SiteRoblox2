@@ -736,6 +736,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 </footer>
 
 <script>
+  // COLLE LE BLOC ICI, TOUT AU DÉBUT
+console.warn = function() {}; 
+console.info = function() {};
+
+if (window.console && console.log) {
+    Object.defineProperty(window, 'allowPasting', { get: function() { return true; } });
+}
+  
 // ════════════ STATE ════════════
 var PRODUCTS = JSON.parse(localStorage.getItem('rbxs_products')||'null') || [
   {id:1,cat:'batiment',title:'Centre Commercial Premium',
