@@ -24,14 +24,12 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // ─── API FIREBASE EXPOSÉE GLOBALEMENT ───
   window._fbDb = db;
   window._fbDoc = doc;
   window._fbGetDoc = getDoc;
   window._fbSetDoc = setDoc;
   window._fbDeleteDoc = deleteDoc;
 
-  // Signal que Firebase est prêt
   window._firebaseReady = true;
   document.dispatchEvent(new Event('firebaseReady'));
 </script>
@@ -298,6 +296,9 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .plugin-locked-box{background:rgba(153,102,255,.06);border:1px solid rgba(153,102,255,.2);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text2);font-family:'Rajdhani',sans-serif;font-weight:600;width:100%;}
 .plugin-lock-icon{font-size:16px;flex-shrink:0;}
 .plugin-locked-txt strong{color:var(--purple);display:block;font-size:12px;margin-bottom:2px;}
+/* Bannière Roblox requis */
+.roblox-required-notice{display:flex;align-items:center;gap:8px;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.25);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:var(--orange);font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.5px;}
+.roblox-required-notice .rn-icon{font-size:14px;flex-shrink:0;}
 .btn-report{background:transparent;border:none;color:var(--text3);font-size:11px;font-family:'Rajdhani',sans-serif;cursor:none;padding:4px 0;transition:color .2s;letter-spacing:.5px;}
 .btn-report:hover{color:var(--red);}
 .modal-report-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border);margin-top:6px;}
@@ -327,6 +328,9 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .favs-empty{text-align:center;padding:60px 20px;color:var(--text2);}
 .favs-empty-icon{font-size:52px;margin-bottom:16px;}
 .favs-empty-txt{font-size:14px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;}
+/* Section YouTube */
+.youtube-embed-wrap{width:100%;aspect-ratio:16/9;max-width:900px;margin:0 auto;border-radius:14px;overflow:hidden;border:1px solid var(--border2);background:var(--surface2);display:block;}
+.youtube-embed-wrap iframe{width:100%;height:100%;border:none;display:block;}
 .admin-trigger{position:fixed;bottom:26px;right:26px;z-index:200;width:46px;height:46px;border-radius:10px;background:rgba(153,102,255,.15);border:1px solid var(--purple);display:flex;align-items:center;justify-content:center;cursor:none;transition:all .3s;font-size:20px;backdrop-filter:blur(10px);}
 .admin-trigger:hover{background:rgba(153,102,255,.35);box-shadow:0 0 24px rgba(153,102,255,.5);}
 .admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:600;display:flex;align-items:stretch;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .3s;}
@@ -608,6 +612,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
   <div class="nav-links">
     <button class="nav-link" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Assets</button>
     <button class="nav-link" onclick="document.getElementById('packs-section').scrollIntoView({behavior:'smooth'})">Packs</button>
+    <button class="nav-link" onclick="document.getElementById('tuto-section').scrollIntoView({behavior:'smooth'})">Tutoriel</button>
     <button class="nav-link" onclick="showFavsSection()">Favoris</button>
     <button class="nav-link" onclick="document.getElementById('footer').scrollIntoView({behavior:'smooth'})">Contact</button>
   </div>
@@ -678,6 +683,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     <div class="products-grid" id="favs-grid"></div>
     <button class="btn-secondary" style="margin-top:20px" onclick="hideFavsSection()">← Retour aux assets</button>
   </section>
+
   <section id="products-section" style="margin-bottom:80px;">
     <div class="section-header reveal">
       <div class="section-eyebrow">Collection complète</div>
@@ -687,6 +693,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
     <div class="filter-bar reveal" id="filter-bar"></div>
     <div class="products-grid" id="products-grid"></div>
   </section>
+
   <section id="packs-section" style="margin-bottom:80px;">
     <div class="section-divider"><div class="divider-icon">🧱</div></div>
     <div class="section-header reveal">
@@ -695,6 +702,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
       <div class="section-sub">Économise jusqu'à 40% en prenant nos packs curatés</div>
     </div>
     <div class="packs-grid" id="packs-grid"></div>
+  </section>
+
+  <!-- ✅ NOUVEAU : Section tutoriel YouTube -->
+  <section id="tuto-section" style="display:none;margin-bottom:80px;">
+    <div class="section-divider"><div class="divider-icon">🎬</div></div>
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Guide vidéo</div>
+      <div class="section-title">Tutoriel</div>
+      <div class="section-sub">Comment importer et utiliser les assets dans Roblox Studio — connexion Roblox requise pour l'achat</div>
+    </div>
+    <div class="youtube-embed-wrap" id="tuto-iframe-wrap"></div>
   </section>
 </main>
 
@@ -705,13 +723,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 </footer>
 
 <script>
-// ══════════════════════════════════════════════════════════════
-//  SYSTÈME DE STOCKAGE — FIREBASE FIRESTORE
-//  Toutes les données sont synchronisées en temps réel
-//  sur tous les appareils via Firebase.
-// ══════════════════════════════════════════════════════════════
-
-// ─── DONNÉES PAR DÉFAUT ───
+// ═══════════════════════════════════════════════════════════════
+//  DONNÉES PAR DÉFAUT
+// ═══════════════════════════════════════════════════════════════
 var DEFAULT_PRODUCTS = [
   {id:1,cat:'batiment',title:'Centre Commercial Premium',descShort:'Mall 2 étages avec boutiques, food court et parkings intégrés.',descLong:'Ce centre commercial ultra-détaillé comprend 2 niveaux intégralement modélisés avec escalators, ascenseurs, food court central et 12 boutiques indépendantes configurables.',descTech:'Compatible R15 · Anchored · CanCollide activé · LOD optimisé',descIncluded:'Fichier .rbxm prêt à importer\nTextures HD intégrées\n12 boutiques vides configurables\nParking extérieur 40 places\nFood court avec tables',specs:['2 étages','12 boutiques','Parking'],price:800,old:1200,badge:'hot',images:[],emoji:'🏬',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
   {id:2,cat:'batiment',title:'Station-Service Ultra',descShort:'Station complète avec pompes, mini-market et zone de lavage.',descLong:'Station-service réaliste avec 4 pompes à carburant animées, un mini-market intérieur complet et une zone de lavage automatique.',descTech:'Compatible R15 · Anchored · Pompes animées par script optionnel',descIncluded:'Fichier .rbxm complet\n4 pompes design réaliste\nMini-market intérieur\nCar wash animé\nEnseignes lumineuses',specs:['4 pompes','Mini-market','Car wash'],price:500,old:null,badge:'new',images:[],emoji:'⛽',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
@@ -729,18 +743,15 @@ var DEFAULT_PACKS = [
 var PRODUCTS=[], PACKS=[], EVENTS=[], REPORTS=[], REVIEWS={}, BANS=[], PROBLEMS=[];
 var FAVORITES=[], PURCHASED=[];
 var ADMIN_PASSWORD='admin123', ADMIN_PIN='1234', USER_ID='';
+var YOUTUBE_VIDEO_ID='';
 
-// ══════════════════════════════════════════════════════════════
-//  COUCHE FIREBASE — sGet / sSet / sDelete
-//  Chaque "document" Firestore = une clé de données.
-//  Collection : "rbxs_data" → doc id = clé.
-// ══════════════════════════════════════════════════════════════
-
+// ═══════════════════════════════════════════════════════════════
+//  COUCHE FIREBASE
+// ═══════════════════════════════════════════════════════════════
 function waitFirebase() {
   return new Promise(function(resolve) {
     if (window._firebaseReady && window._fbDb) { resolve(); return; }
     document.addEventListener('firebaseReady', resolve, {once: true});
-    // timeout de sécurité 8s → fallback localStorage
     setTimeout(resolve, 8000);
   });
 }
@@ -756,7 +767,6 @@ async function sGet(key) {
     }
     return null;
   } catch(e) {
-    console.warn('Firebase sGet error, fallback local:', e);
     return localGet(key);
   }
 }
@@ -768,7 +778,6 @@ async function sSet(key, val) {
     await window._fbSetDoc(ref, { value: val, updatedAt: Date.now() });
     return true;
   } catch(e) {
-    console.warn('Firebase sSet error, fallback local:', e);
     return localSet(key, val);
   }
 }
@@ -792,22 +801,20 @@ function localSet(key, val) {
   catch(e) { return false; }
 }
 
-// ─── CLÉS ───
 var KEYS = {
   products:'rbxs_products', packs:'rbxs_packs', events:'rbxs_events',
   reports:'rbxs_reports', reviews:'rbxs_reviews', bans:'rbxs_bans',
   problems:'rbxs_problems', favorites:'rbxs_favorites', purchased:'rbxs_purchased',
   adminPwd:'rbxs_admin_pwd', adminPin:'rbxs_admin_pin', uid:'rbxs_uid', topbar:'rbxs_topbar',
+  youtube:'rbxs_youtube_tuto',
 };
 
 // ─── CHARGEMENT INITIAL ───
 async function loadAllData() {
   setLoading(5, 'Attente Firebase...');
   await waitFirebase();
-
   setLoading(15, 'Connexion Firestore...');
 
-  // UID — stocké aussi en localStorage pour persistance locale
   var uid = localStorage.getItem('rbxs_uid_local');
   if (uid) { USER_ID = uid; }
   else { USER_ID = 'user_' + Math.random().toString(36).substr(2,9); localStorage.setItem('rbxs_uid_local', USER_ID); }
@@ -828,7 +835,6 @@ async function loadAllData() {
   PROBLEMS  = (await sGet(KEYS.problems))  || [];
 
   setLoading(72, 'Chargement de tes données...');
-  // Favoris & achats : stockés par UID dans Firestore
   FAVORITES = (await sGet(KEYS.favorites + '_' + USER_ID)) || [];
   PURCHASED = (await sGet(KEYS.purchased + '_' + USER_ID)) || [];
 
@@ -840,6 +846,9 @@ async function loadAllData() {
 
   var tb = await sGet(KEYS.topbar);
   if (tb) document.getElementById('topbar-el').textContent = tb;
+
+  var yt = await sGet(KEYS.youtube);
+  if (yt) YOUTUBE_VIDEO_ID = yt;
 
   setLoading(100, 'Prêt !');
   await new Promise(function(r){ setTimeout(r, 400); });
@@ -894,6 +903,43 @@ function saveBans()      { scheduleSave(KEYS.bans,      BANS);      }
 function saveProblems()  { scheduleSave(KEYS.problems,  PROBLEMS);  }
 function saveFavorites() { scheduleSave(KEYS.favorites+'_'+USER_ID, FAVORITES); }
 function savePurchased() { scheduleSave(KEYS.purchased+'_'+USER_ID, PURCHASED); }
+
+// ═══════════════════════════════════════════════════════════════
+//  ✅ AMÉLIORATION 1 — SYNC TEMPS RÉEL (polling 5 secondes)
+//  Les messages admin (topbar + événements) sont mis à jour
+//  automatiquement pour tous les visiteurs sans rechargement.
+// ═══════════════════════════════════════════════════════════════
+var _lastTopbar = '', _lastEventHash = '', _lastYoutubeId = '';
+
+function startRealtimeSync() {
+  setInterval(async function() {
+    try {
+      // Sync topbar
+      var tb = await sGet(KEYS.topbar);
+      if (tb && tb !== _lastTopbar) {
+        _lastTopbar = tb;
+        document.getElementById('topbar-el').textContent = tb;
+      }
+      // Sync événements
+      var evts = await sGet(KEYS.events);
+      if (evts) {
+        var h = JSON.stringify(evts);
+        if (h !== _lastEventHash) {
+          _lastEventHash = h;
+          EVENTS = evts;
+          refreshEventBanner();
+        }
+      }
+      // Sync vidéo YouTube
+      var yt = await sGet(KEYS.youtube);
+      if (yt !== undefined && yt !== null && yt !== _lastYoutubeId) {
+        _lastYoutubeId = yt;
+        YOUTUBE_VIDEO_ID = yt;
+        renderYoutubeTuto();
+      }
+    } catch(e) {}
+  }, 5000);
+}
 
 // ─── BAN CHECK ───
 function checkBan() {
@@ -990,6 +1036,23 @@ function refreshEventBanner(){
   }
 }
 function closeBanner(){document.getElementById('event-banner-wrap').classList.remove('show');document.getElementById('banner-spacer').classList.remove('show');document.getElementById('banner-spacer').style.height='0';}
+
+// ═══════════════════════════════════════════════════════════════
+//  ✅ AMÉLIORATION 3 — SECTION VIDÉO YOUTUBE TUTO
+// ═══════════════════════════════════════════════════════════════
+function renderYoutubeTuto() {
+  var section = document.getElementById('tuto-section');
+  if (!section) return;
+  if (!YOUTUBE_VIDEO_ID) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+  document.getElementById('tuto-iframe-wrap').innerHTML =
+    '<iframe src="https://www.youtube.com/embed/' + YOUTUBE_VIDEO_ID +
+    '" title="Tutoriel RBX Studio" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>';
+  observeAll();
+}
 
 // ─── FILTER ───
 var currentFilter='all';
@@ -1118,9 +1181,13 @@ function openProductModal(id){
   var reviewsHtml=reviews.length===0?'<div class="no-reviews">Aucun avis — sois le premier !</div>':reviews.slice().reverse().map(function(r){return'<div class="review-item"><div class="review-stars">'+renderStars(r.stars)+' <span style="font-size:11px;color:var(--text3)">('+r.stars+'/5)</span></div>'+(r.msg?'<div class="review-msg">'+r.msg+'</div>':'')+'<div class="review-meta">'+r.date+'</div></div>';}).join('');
   var alreadyReviewed=reviews.some(function(r){return r.uid===USER_ID;});
   var reviewFormHtml=alreadyReviewed?'<div style="text-align:center;font-size:12px;color:var(--green);font-family:Rajdhani,sans-serif;padding:10px;">✓ Tu as déjà laissé un avis</div>':'<div class="review-form"><div class="review-form-title">📝 Laisser un avis</div><div class="star-picker" id="star-picker-'+id+'"><span class="star-pick" onclick="pickStar('+id+',1)" onmouseover="hoverStar('+id+',1)" onmouseleave="unhoverStar('+id+')">★</span><span class="star-pick" onclick="pickStar('+id+',2)" onmouseover="hoverStar('+id+',2)" onmouseleave="unhoverStar('+id+')">★</span><span class="star-pick" onclick="pickStar('+id+',3)" onmouseover="hoverStar('+id+',3)" onmouseleave="unhoverStar('+id+')">★</span><span class="star-pick" onclick="pickStar('+id+',4)" onmouseover="hoverStar('+id+',4)" onmouseleave="unhoverStar('+id+')">★</span><span class="star-pick" onclick="pickStar('+id+',5)" onmouseover="hoverStar('+id+',5)" onmouseleave="unhoverStar('+id+')">★</span></div><textarea class="form-textarea" id="review-msg-'+id+'" placeholder="Partage ton expérience..." style="margin-bottom:10px;min-height:70px;"></textarea><button class="btn-save" style="width:100%" onclick="submitReview('+id+')">Publier mon avis</button></div>';
+
+  // ✅ AMÉLIORATION 2 — Notice "connexion Roblox requise" dans la modal
+  var robloxNotice = '<div class="roblox-required-notice"><span class="rn-icon">⚠️</span>Connexion à ton compte Roblox requise pour finaliser l\'achat</div>';
+
   document.getElementById('modal-body').innerHTML=galleryHtml+tabsHtml+'<div class="modal-specs-grid" style="margin-top:14px;">'+specs+'<div class="mspec"><div class="mspec-lbl">Catégorie</div><div class="mspec-val">'+getCatIcon(pr.cat)+' '+getCatLabel(pr.cat)+'</div></div><div class="mspec"><div class="mspec-lbl">Livraison</div><div class="mspec-val">Instantanée</div></div></div>'
     +'<div class="modal-price-row"><div>'+priceOld+'<div class="modal-price">R$ '+pr.price.toLocaleString()+'</div></div>'
-    +'<div class="modal-buy-btns"><button class="btn-buy-pass" onclick="buyPass('+pr.id+')">🎫 Acheter le Pass</button>'+pluginSection+'</div></div>'
+    +'<div class="modal-buy-btns">'+robloxNotice+'<button class="btn-buy-pass" onclick="buyPass('+pr.id+')">🎫 Acheter le Pass</button>'+pluginSection+'</div></div>'
     +'<div class="modal-report-row"><button class="modal-fav-btn'+(favActive?' active':'')+'" onclick="toggleFav('+pr.id+',null);this.classList.toggle(\'active\');this.textContent=this.classList.contains(\'active\')?\'⭐ Favori\':\'☆ Ajouter aux favoris\'">'+(favActive?'⭐ Favori':'☆ Ajouter aux favoris')+'</button><button class="btn-report" onclick="openReportModal('+pr.id+')">🚩 Signaler</button></div>'
     +'<div class="modal-reviews-section"><div class="reviews-title">Avis acheteurs <span class="reviews-avg">'+avgDisp+'</span></div><div class="review-list">'+reviewsHtml+'</div>'+reviewFormHtml+'</div>';
   selectedStars=0;
@@ -1140,10 +1207,13 @@ function submitReview(pid){
   saveReviews();showToast('⭐ Avis publié !','var(--gold)');renderProducts();openProductModal(pid);
 }
 
-// ─── BUY ───
+// ═══════════════════════════════════════════════════════════════
+//  ✅ AMÉLIORATION 2 — CONNEXION ROBLOX REQUISE sur les achats
+// ═══════════════════════════════════════════════════════════════
 var cartCount=0;
 function buyPass(id){
   var pr=PRODUCTS.find(function(x){return x.id===id;});if(!pr)return;
+  if(!confirm('⚠️ Connexion Roblox requise\n\nAssure-toi d\'être connecté sur roblox.com avant de finaliser l\'achat.\n\nContinuer vers Discord ?'))return;
   cartCount++;document.getElementById('cart-count').textContent=cartCount;
   showToast('🎫 Pass '+pr.title+' — Redirection...','var(--studio)');
   markPurchased(id);closeModal();
@@ -1151,11 +1221,13 @@ function buyPass(id){
 }
 function buyPlugin(id){
   var pr=PRODUCTS.find(function(x){return x.id===id;});if(!pr||!hasPurchased(id))return;
+  if(!confirm('⚠️ Connexion Roblox requise\n\nAssure-toi d\'être connecté sur roblox.com avant d\'accéder au plugin.\n\nContinuer ?'))return;
   showToast('🔌 Plugin — Accès accordé !','var(--purple)');
   setTimeout(function(){window.open(pr.linkPlugin||'https://discord.gg/votre-lien','_blank');},600);
 }
 function buyPackIdx(i){
   var pk=PACKS[i];if(!pk)return;
+  if(!confirm('⚠️ Connexion Roblox requise\n\nAssure-toi d\'être connecté sur roblox.com avant de finaliser l\'achat.\n\nContinuer vers Discord ?'))return;
   showToast('Pack '+pk.title+' — Redirection...','var(--gold)');
   setTimeout(function(){window.open(pk.link||'https://discord.gg/votre-lien','_blank');},1000);
 }
@@ -1429,11 +1501,11 @@ function savePack(i){
 
 // ─── ADMIN EVENTS ───
 function renderAdminEventsTab(){
-  var html='<div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Les événements actifs s\'affichent en bannière.</div>';
+  var html='<div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Les événements actifs s\'affichent en bannière instantanément pour tous les visiteurs.</div>';
   html+='<div class="event-list">'+EVENTS.map(function(ev,i){
     return'<div class="event-row'+(ev.active?' active-event':'')+'">'
       +'<div class="event-row-emoji">'+(ev.emoji||'🎉')+'</div>'
-      +'<div class="event-row-info"><div class="event-row-title">'+ev.text+'</div><div class="event-row-sub">'+(ev.active?'Actif':'Inactif')+'</div></div>'
+      +'<div class="event-row-info"><div class="event-row-title">'+ev.text+'</div><div class="event-row-sub">'+(ev.active?'Actif — visible par tous':'Inactif')+'</div></div>'
       +'<span class="event-row-badge '+(ev.active?'erb-active':'erb-inactive')+'">'+(ev.active?'ACTIF':'INACTIF')+'</span>'
       +'<button class="event-toggle-btn '+(ev.active?'etb-off':'etb-on')+'" onclick="toggleEvt('+i+')">'+(ev.active?'Désactiver':'Activer')+'</button>'
       +'<button class="event-toggle-btn etb-del" onclick="deleteEvt('+i+')">✕</button>'
@@ -1454,9 +1526,9 @@ function addEvt(){
   var txt=document.getElementById('ev-text').value.trim();
   if(!txt){showToast('Saisis un texte','var(--orange)');return;}
   EVENTS.push({id:Date.now(),emoji:document.getElementById('ev-emoji').value||'🎉',text:txt,active:document.getElementById('ev-active').value==='1'});
-  saveEvents();refreshEventBanner();showToast('Événement créé !','var(--gold)');renderAdminEventsTab();
+  saveEvents();refreshEventBanner();showToast('Événement créé — visible instantanément !','var(--gold)');renderAdminEventsTab();
 }
-function toggleEvt(i){EVENTS[i].active=!EVENTS[i].active;saveEvents();refreshEventBanner();renderAdminEventsTab();}
+function toggleEvt(i){EVENTS[i].active=!EVENTS[i].active;saveEvents();refreshEventBanner();renderAdminEventsTab();showToast(EVENTS[i].active?'Événement activé — visible par tous !':'Événement désactivé',EVENTS[i].active?'var(--gold)':'var(--text2)');}
 function deleteEvt(i){EVENTS.splice(i,1);saveEvents();refreshEventBanner();renderAdminEventsTab();}
 
 // ─── ADMIN REPORTS ───
@@ -1602,15 +1674,23 @@ function renderAdminSettings(){
       +'<div class="form-actions" style="margin-top:14px"><button class="btn-save" onclick="saveSecuritySettings()">Mettre à jour</button></div>'
     +'</div>'
     +'<div class="settings-section">'
-      +'<div class="settings-title">🏪 Bannière haut de page</div>'
+      +'<div class="settings-title">🏪 Bannière haut de page <span style="font-size:9px;color:var(--green);font-family:Rajdhani,sans-serif;font-weight:700;letter-spacing:1px;margin-left:8px;">⚡ TEMPS RÉEL</span></div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-bottom:8px;font-family:Rajdhani,sans-serif;">Le texte s\'applique instantanément pour tous les visiteurs sans rechargement.</div>'
       +'<div class="form-group"><input class="form-input" id="set-topbar" value="'+document.getElementById('topbar-el').innerText.trim().replace(/"/g,'&quot;')+'"/></div>'
       +'<div class="form-actions" style="margin-top:10px"><button class="btn-save" onclick="saveTopbar()">Appliquer</button></div>'
+    +'</div>'
+    // ✅ AMÉLIORATION 3 — Section YouTube dans les réglages admin
+    +'<div class="settings-section">'
+      +'<div class="settings-title">🎬 Vidéo YouTube Tutoriel</div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-bottom:8px;font-family:Rajdhani,sans-serif;">Colle uniquement l\'ID YouTube (ex: <span style="color:var(--studio);font-family:monospace">dQw4w9WgXcQ</span> depuis l\'URL youtube.com/watch?v=<b>dQw4w9WgXcQ</b>). La section tutoriel apparaît automatiquement sur le site dès qu\'un ID est renseigné.</div>'
+      +'<div class="form-group" style="margin-bottom:10px;"><input class="form-input" id="set-youtube" value="'+YOUTUBE_VIDEO_ID+'" placeholder="ID de la vidéo YouTube (ex: dQw4w9WgXcQ)"/></div>'
+      +'<div class="form-actions"><button class="btn-save" onclick="saveYoutube()">Appliquer</button><button class="btn-cancel" style="margin-left:8px" onclick="clearYoutube()">Retirer la vidéo</button></div>'
     +'</div>'
     +'<div class="settings-section">'
       +'<div class="settings-title">🔥 Firebase Firestore</div>'
       +'<div style="font-size:13px;padding:10px 14px;border-radius:9px;border:1px solid rgba(255,162,0,.3);background:rgba(255,162,0,.06);font-family:Rajdhani,sans-serif;font-weight:700;">'
         +(window._fbDb
-          ?'<span style="color:#FFA200">🔥 Connecté à Firebase Firestore</span><br><span style="color:var(--text2);font-weight:400;font-size:11px;">Projet : site-roblox-dc692 · Collection : rbxs_data</span>'
+          ?'<span style="color:#FFA200">🔥 Connecté à Firebase Firestore</span><br><span style="color:var(--text2);font-weight:400;font-size:11px;">Projet : site-roblox-dc692 · Collection : rbxs_data · Sync temps réel toutes les 5s</span>'
           :'<span style="color:var(--red)">⚠ Firebase non connecté — mode local actif</span>')
       +'</div>'
     +'</div>'
@@ -1621,6 +1701,7 @@ function renderAdminSettings(){
         +'<div>🚩 <b style="color:var(--red)">'+REPORTS.filter(function(r){return !r.resolved;}).length+'</b> signalements ouverts</div>'
         +'<div>🚫 <b style="color:var(--orange)">'+BANS.filter(function(b){return b.active;}).length+'</b> bans actifs</div>'
         +'<div>⭐ <b style="color:var(--gold)">'+Object.values(REVIEWS).reduce(function(a,b){return a+b.length;},0)+'</b> avis publiés</div>'
+        +'<div>🎬 Vidéo tuto : <span style="color:var(--studio);font-family:monospace">'+(YOUTUBE_VIDEO_ID||'aucune')+'</span></div>'
         +'<div>🆔 Ton UID: <span style="color:var(--studio);font-family:monospace">'+USER_ID+'</span></div>'
       +'</div>'
     +'</div>'
@@ -1632,6 +1713,7 @@ function renderAdminSettings(){
       +'</div>'
     +'</div>';
 }
+
 async function saveSecuritySettings(){
   var pwd=document.getElementById('set-pwd').value,pwd2=document.getElementById('set-pwd2').value;
   var pin=document.getElementById('set-pin').value,pin2=document.getElementById('set-pin2').value;
@@ -1644,9 +1726,32 @@ async function saveSecuritySettings(){
 }
 async function saveTopbar(){
   var tb=document.getElementById('set-topbar').value;
-  if(tb){document.getElementById('topbar-el').textContent=tb;await sSet(KEYS.topbar,tb);}
-  showToast('Bannière mise à jour !','var(--green)');
+  if(tb){
+    _lastTopbar=tb;
+    document.getElementById('topbar-el').textContent=tb;
+    await sSet(KEYS.topbar,tb);
+  }
+  showToast('Bannière mise à jour — visible instantanément !','var(--green)');
 }
+
+// ✅ Fonctions YouTube admin
+async function saveYoutube(){
+  var val=document.getElementById('set-youtube').value.trim();
+  YOUTUBE_VIDEO_ID=val;
+  _lastYoutubeId=val;
+  await sSet(KEYS.youtube,val);
+  renderYoutubeTuto();
+  showToast(val?'🎬 Vidéo YouTube appliquée !':'Vidéo retirée','var(--studio)');
+}
+async function clearYoutube(){
+  YOUTUBE_VIDEO_ID='';
+  _lastYoutubeId='';
+  document.getElementById('set-youtube').value='';
+  await sSet(KEYS.youtube,'');
+  renderYoutubeTuto();
+  showToast('Vidéo retirée du site','var(--text2)');
+}
+
 async function resetPurchases(){
   PURCHASED=[];
   await sSet(KEYS.purchased+'_'+USER_ID,[]);
@@ -1658,7 +1763,6 @@ async function resetAll(){
   for(var i=0;i<allKeys.length;i++){
     await sDelete(allKeys[i]);
   }
-  // Supprimer aussi les clés par UID
   await sDelete(KEYS.favorites+'_'+USER_ID);
   await sDelete(KEYS.purchased+'_'+USER_ID);
   showToast('Reset Firebase effectué, rechargement...','var(--red)');
@@ -1673,7 +1777,10 @@ function initApp(){
   renderProducts();
   renderPacks();
   refreshEventBanner();
+  renderYoutubeTuto();
   observeAll();
+  // ✅ Démarrage du polling temps réel (5 secondes)
+  startRealtimeSync();
 }
 
 // ─── DÉMARRAGE ───
