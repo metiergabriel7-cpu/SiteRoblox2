@@ -5,6 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>RBX Studio Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCuQdE0cyoj805E8-M22GKEjF4sb-A3FaY",
+    authDomain: "site-roblox-dc692.firebaseapp.com",
+    projectId: "site-roblox-dc692",
+    storageBucket: "site-roblox-dc692.firebasestorage.app",
+    messagingSenderId: "829940954382",
+    appId: "1:829940954382:web:9a6c9da13a64b57998535f",
+    measurementId: "G-ZG9JYG98SY"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ─── API FIREBASE EXPOSÉE GLOBALEMENT ───
+  window._fbDb = db;
+  window._fbDoc = doc;
+  window._fbGetDoc = getDoc;
+  window._fbSetDoc = setDoc;
+  window._fbDeleteDoc = deleteDoc;
+
+  // Signal que Firebase est prêt
+  window._firebaseReady = true;
+  document.dispatchEvent(new Event('firebaseReady'));
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -447,7 +478,7 @@ main{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px 36p
 .pi-btn-del:hover{color:var(--red);border-color:var(--red);}
 .no-items-msg{text-align:center;padding:40px;color:var(--text2);font-family:'Rajdhani',sans-serif;font-size:13px;}
 .storage-mode-badge{position:fixed;bottom:26px;left:26px;z-index:200;padding:4px 10px;border-radius:6px;font-size:9px;font-family:'Rajdhani',sans-serif;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;backdrop-filter:blur(8px);}
-.storage-mode-badge.cloud{background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.3);color:var(--studio);}
+.storage-mode-badge.firebase{background:rgba(255,162,0,.12);border:1px solid rgba(255,162,0,.35);color:#FFA200;}
 .storage-mode-badge.local{background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.3);color:var(--gold);}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
@@ -466,7 +497,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 <div id="loading-screen">
   <div class="loading-logo">RBX STUDIO</div>
   <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  <div class="loading-txt" id="loading-txt">Initialisation...</div>
+  <div class="loading-txt" id="loading-txt">Connexion Firebase...</div>
 </div>
 
 <div class="ban-screen hidden" id="ban-screen">
@@ -484,8 +515,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 <div class="blueprint-lines" id="blueprint-lines"></div>
 <div id="particles-container"></div>
 <div class="toast-container" id="toasts"></div>
-<div class="autosave-dot" id="autosave-dot" style="bottom:56px"><div class="as-pulse"></div><span id="autosave-txt">Sync</span></div>
-<div class="storage-mode-badge" id="storage-mode-badge">...</div>
+<div class="autosave-dot" id="autosave-dot" style="bottom:56px"><div class="as-pulse"></div><span id="autosave-txt">Firebase</span></div>
+<div class="storage-mode-badge firebase" id="storage-mode-badge">🔥 Firebase</div>
 
 <div id="event-banner-wrap">
   <div class="event-banner" style="position:relative;">
@@ -675,106 +706,18 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:36
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  SYSTÈME DE STOCKAGE HYBRIDE
-//  Priorité : window.storage (artefact Claude) → localStorage (navigateur)
-//  Fonctionne sur TOUTES les plateformes sans erreur.
+//  SYSTÈME DE STOCKAGE — FIREBASE FIRESTORE
+//  Toutes les données sont synchronisées en temps réel
+//  sur tous les appareils via Firebase.
 // ══════════════════════════════════════════════════════════════
-
-var STORAGE_MODE = 'local'; // sera mis à jour après détection
-
-// ─── DÉTECTION AUTOMATIQUE DU BACKEND ───
-function detectStorageBackend() {
-  if (typeof window !== 'undefined' &&
-      window.storage &&
-      typeof window.storage.get === 'function' &&
-      typeof window.storage.set === 'function') {
-    STORAGE_MODE = 'cloud';
-    return true;
-  }
-  STORAGE_MODE = 'local';
-  return false;
-}
-
-// ─── API UNIFIÉE ───
-async function sGet(key) {
-  if (STORAGE_MODE === 'cloud') {
-    try {
-      var r = await window.storage.get(key);
-      if (r && r.value !== undefined && r.value !== null) {
-        return JSON.parse(r.value);
-      }
-      return null;
-    } catch(e) {
-      // fallback local si erreur cloud
-      return localGet(key);
-    }
-  } else {
-    return localGet(key);
-  }
-}
-
-async function sSet(key, val) {
-  if (STORAGE_MODE === 'cloud') {
-    try {
-      await window.storage.set(key, JSON.stringify(val));
-      return true;
-    } catch(e) {
-      // fallback local si erreur cloud
-      return localSet(key, val);
-    }
-  } else {
-    return localSet(key, val);
-  }
-}
-
-async function sDelete(key) {
-  if (STORAGE_MODE === 'cloud') {
-    try { await window.storage.delete(key); } catch(e) {}
-  }
-  try { localStorage.removeItem(key); } catch(e) {}
-}
-
-function localGet(key) {
-  try {
-    var v = localStorage.getItem(key);
-    return v ? JSON.parse(v) : null;
-  } catch(e) { return null; }
-}
-
-function localSet(key, val) {
-  try {
-    localStorage.setItem(key, JSON.stringify(val));
-    return true;
-  } catch(e) {
-    console.warn('localStorage write error:', e);
-    return false;
-  }
-}
-
-// ─── CLÉS DE STOCKAGE ───
-var KEYS = {
-  products:  'rbxs_v2_products',
-  packs:     'rbxs_v2_packs',
-  events:    'rbxs_v2_events',
-  reports:   'rbxs_v2_reports',
-  reviews:   'rbxs_v2_reviews',
-  bans:      'rbxs_v2_bans',
-  problems:  'rbxs_v2_problems',
-  favorites: 'rbxs_v2_favorites',
-  purchased: 'rbxs_v2_purchased',
-  adminPwd:  'rbxs_v2_admin_pwd',
-  adminPin:  'rbxs_v2_admin_pin',
-  uid:       'rbxs_v2_uid',
-  topbar:    'rbxs_v2_topbar',
-};
 
 // ─── DONNÉES PAR DÉFAUT ───
 var DEFAULT_PRODUCTS = [
   {id:1,cat:'batiment',title:'Centre Commercial Premium',descShort:'Mall 2 étages avec boutiques, food court et parkings intégrés.',descLong:'Ce centre commercial ultra-détaillé comprend 2 niveaux intégralement modélisés avec escalators, ascenseurs, food court central et 12 boutiques indépendantes configurables.',descTech:'Compatible R15 · Anchored · CanCollide activé · LOD optimisé',descIncluded:'Fichier .rbxm prêt à importer\nTextures HD intégrées\n12 boutiques vides configurables\nParking extérieur 40 places\nFood court avec tables',specs:['2 étages','12 boutiques','Parking'],price:800,old:1200,badge:'hot',images:[],emoji:'🏬',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
   {id:2,cat:'batiment',title:'Station-Service Ultra',descShort:'Station complète avec pompes, mini-market et zone de lavage.',descLong:'Station-service réaliste avec 4 pompes à carburant animées, un mini-market intérieur complet et une zone de lavage automatique.',descTech:'Compatible R15 · Anchored · Pompes animées par script optionnel',descIncluded:'Fichier .rbxm complet\n4 pompes design réaliste\nMini-market intérieur\nCar wash animé\nEnseignes lumineuses',specs:['4 pompes','Mini-market','Car wash'],price:500,old:null,badge:'new',images:[],emoji:'⛽',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
   {id:3,cat:'batiment',title:'Fast-Food Drive',descShort:'Restaurant fast-food avec drive-through et enseigne animée.',descLong:'Fast-food moderne style burger avec drive-through intégré, terrasse extérieure et intérieur avec tables et comptoir détaillé.',descTech:'Compatible R15 · Anchored · Néon script inclus · ~850 parts',descIncluded:'Fichier .rbxm\nIntérieur + extérieur\nDrive-through complet\nEnseignes néon\nTerrasse',specs:['Drive-through','Terrasse','Néon'],price:400,old:null,badge:null,images:[],emoji:'🍔',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:4,cat:'batiment',title:'Entrepôt Industriel',descShort:'Grand entrepôt avec quai de chargement et parking PL.',descLong:'Entrepôt industriel grande échelle avec quai de chargement surélevé et zone de stationnement pour poids lourds.',descTech:'Compatible R15 · Anchored · Intérieur vide · ~1200 parts',descIncluded:'Fichier .rbxm\nQuai de chargement\nParking PL 8 places\nPortail coulissant\nClôture périmétrique',specs:['Quai chargement','Parking PL','Sécurité'],price:550,old:750,badge:'sale',images:[],emoji:'🏭',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
-  {id:5,cat:'batiment',title:'Boutique Moderne',descShort:'Petite boutique tendance avec vitrine illuminée.',descLong:'Boutique tendance avec grande vitrine illuminée, intérieur avec présentoirs, comptoir et cabine d\'essayage.',descTech:'Compatible R15 · Anchored · ~400 parts · Vitrine avec émissive lighting',descIncluded:'Fichier .rbxm\nVitrine illuminée\nIntérieur avec présentoirs\nComptoir caisse\nCabine d\'essayage',specs:['Vitrine illuminée','2 pièces','Optimisé'],price:300,old:null,badge:null,images:[],emoji:'🏪',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:4,cat:'batiment',title:'Entrepôt Industriel',descShort:'Grand entrepôt avec quai de chargement et parking PL.',descLong:"Entrepôt industriel grande échelle avec quai de chargement surélevé et zone de stationnement pour poids lourds.",descTech:'Compatible R15 · Anchored · Intérieur vide · ~1200 parts',descIncluded:'Fichier .rbxm\nQuai de chargement\nParking PL 8 places\nPortail coulissant\nClôture périmétrique',specs:['Quai chargement','Parking PL','Sécurité'],price:550,old:750,badge:'sale',images:[],emoji:'🏭',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
+  {id:5,cat:'batiment',title:'Boutique Moderne',descShort:'Petite boutique tendance avec vitrine illuminée.',descLong:"Boutique tendance avec grande vitrine illuminée, intérieur avec présentoirs, comptoir et cabine d'essayage.",descTech:'Compatible R15 · Anchored · ~400 parts · Vitrine avec émissive lighting',descIncluded:"Fichier .rbxm\nVitrine illuminée\nIntérieur avec présentoirs\nComptoir caisse\nCabine d'essayage",specs:['Vitrine illuminée','2 pièces','Optimisé'],price:300,old:null,badge:null,images:[],emoji:'🏪',linkPass:'https://discord.gg/votre-lien',linkPlugin:'https://discord.gg/votre-lien'},
 ];
 var DEFAULT_PACKS = [
   {id:'starter',tier:'starter',title:'City Starter',sub:'Parfait pour commencer une ville',items:['Centre Commercial Standard','Station-Service Classique','Fast-Food Drive','Support Discord'],price:1800,old:2400,savings:'25',link:'https://discord.gg/votre-lien'},
@@ -787,38 +730,109 @@ var PRODUCTS=[], PACKS=[], EVENTS=[], REPORTS=[], REVIEWS={}, BANS=[], PROBLEMS=
 var FAVORITES=[], PURCHASED=[];
 var ADMIN_PASSWORD='admin123', ADMIN_PIN='1234', USER_ID='';
 
+// ══════════════════════════════════════════════════════════════
+//  COUCHE FIREBASE — sGet / sSet / sDelete
+//  Chaque "document" Firestore = une clé de données.
+//  Collection : "rbxs_data" → doc id = clé.
+// ══════════════════════════════════════════════════════════════
+
+function waitFirebase() {
+  return new Promise(function(resolve) {
+    if (window._firebaseReady && window._fbDb) { resolve(); return; }
+    document.addEventListener('firebaseReady', resolve, {once: true});
+    // timeout de sécurité 8s → fallback localStorage
+    setTimeout(resolve, 8000);
+  });
+}
+
+async function sGet(key) {
+  try {
+    if (!window._fbDb) return localGet(key);
+    var ref = window._fbDoc(window._fbDb, 'rbxs_data', key);
+    var snap = await window._fbGetDoc(ref);
+    if (snap.exists()) {
+      var d = snap.data();
+      return d.value !== undefined ? d.value : null;
+    }
+    return null;
+  } catch(e) {
+    console.warn('Firebase sGet error, fallback local:', e);
+    return localGet(key);
+  }
+}
+
+async function sSet(key, val) {
+  try {
+    if (!window._fbDb) return localSet(key, val);
+    var ref = window._fbDoc(window._fbDb, 'rbxs_data', key);
+    await window._fbSetDoc(ref, { value: val, updatedAt: Date.now() });
+    return true;
+  } catch(e) {
+    console.warn('Firebase sSet error, fallback local:', e);
+    return localSet(key, val);
+  }
+}
+
+async function sDelete(key) {
+  try {
+    if (window._fbDb) {
+      var ref = window._fbDoc(window._fbDb, 'rbxs_data', key);
+      await window._fbDeleteDoc(ref);
+    }
+  } catch(e) {}
+  try { localStorage.removeItem(key); } catch(e) {}
+}
+
+function localGet(key) {
+  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+  catch(e) { return null; }
+}
+function localSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+  catch(e) { return false; }
+}
+
+// ─── CLÉS ───
+var KEYS = {
+  products:'rbxs_products', packs:'rbxs_packs', events:'rbxs_events',
+  reports:'rbxs_reports', reviews:'rbxs_reviews', bans:'rbxs_bans',
+  problems:'rbxs_problems', favorites:'rbxs_favorites', purchased:'rbxs_purchased',
+  adminPwd:'rbxs_admin_pwd', adminPin:'rbxs_admin_pin', uid:'rbxs_uid', topbar:'rbxs_topbar',
+};
+
 // ─── CHARGEMENT INITIAL ───
 async function loadAllData() {
-  detectStorageBackend();
-  updateStorageBadge();
+  setLoading(5, 'Attente Firebase...');
+  await waitFirebase();
 
-  setLoading(10, 'Détection du stockage...');
+  setLoading(15, 'Connexion Firestore...');
 
-  // UID
-  var uid = await sGet(KEYS.uid);
+  // UID — stocké aussi en localStorage pour persistance locale
+  var uid = localStorage.getItem('rbxs_uid_local');
   if (uid) { USER_ID = uid; }
-  else { USER_ID = 'user_' + Math.random().toString(36).substr(2,9); await sSet(KEYS.uid, USER_ID); }
+  else { USER_ID = 'user_' + Math.random().toString(36).substr(2,9); localStorage.setItem('rbxs_uid_local', USER_ID); }
 
-  setLoading(25, 'Chargement des produits...');
+  setLoading(30, 'Chargement des produits...');
   var prods = await sGet(KEYS.products);
   PRODUCTS = prods || DEFAULT_PRODUCTS.map(function(p){ return Object.assign({},p); });
 
-  setLoading(40, 'Chargement des packs...');
+  setLoading(45, 'Chargement des packs...');
   var pks = await sGet(KEYS.packs);
   PACKS = pks || DEFAULT_PACKS.map(function(p){ return Object.assign({},p); });
 
-  setLoading(55, 'Chargement des événements...');
+  setLoading(58, 'Chargement des événements...');
   EVENTS    = (await sGet(KEYS.events))    || [];
   REPORTS   = (await sGet(KEYS.reports))   || [];
   REVIEWS   = (await sGet(KEYS.reviews))   || {};
   BANS      = (await sGet(KEYS.bans))      || [];
   PROBLEMS  = (await sGet(KEYS.problems))  || [];
 
-  setLoading(70, 'Chargement de tes données...');
-  FAVORITES = (await sGet(KEYS.favorites)) || [];
-  PURCHASED = (await sGet(KEYS.purchased)) || [];
+  setLoading(72, 'Chargement de tes données...');
+  // Favoris & achats : stockés par UID dans Firestore
+  FAVORITES = (await sGet(KEYS.favorites + '_' + USER_ID)) || [];
+  PURCHASED = (await sGet(KEYS.purchased + '_' + USER_ID)) || [];
 
-  setLoading(85, 'Paramètres admin...');
+  setLoading(86, 'Paramètres admin...');
   var pwd = await sGet(KEYS.adminPwd);
   var pin = await sGet(KEYS.adminPin);
   if (pwd) ADMIN_PASSWORD = pwd;
@@ -831,18 +845,6 @@ async function loadAllData() {
   await new Promise(function(r){ setTimeout(r, 400); });
   hideLoading();
   initApp();
-}
-
-function updateStorageBadge() {
-  var b = document.getElementById('storage-mode-badge');
-  if (!b) return;
-  if (STORAGE_MODE === 'cloud') {
-    b.className = 'storage-mode-badge cloud';
-    b.textContent = '☁ Cloud sync';
-  } else {
-    b.className = 'storage-mode-badge local';
-    b.textContent = '💾 Local storage';
-  }
 }
 
 function setLoading(pct, txt) {
@@ -860,13 +862,13 @@ var _saveQueue = {}, _saveTimer = null;
 function scheduleSave(key, value) {
   _saveQueue[key] = value;
   if (_saveTimer) clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(flushSave, 800);
+  _saveTimer = setTimeout(flushSave, 900);
 }
 async function flushSave() {
   var dot = document.getElementById('autosave-dot');
   var txt = document.getElementById('autosave-txt');
   dot.className = 'autosave-dot saving';
-  txt.textContent = STORAGE_MODE==='cloud' ? 'Cloud...' : 'Local...';
+  txt.textContent = '🔥 Firebase...';
   var keys = Object.keys(_saveQueue), ok = true;
   for (var i=0; i<keys.length; i++) {
     var r = await sSet(keys[i], _saveQueue[keys[i]]);
@@ -875,13 +877,14 @@ async function flushSave() {
   _saveQueue = {};
   if (ok) {
     dot.className = 'autosave-dot saved';
-    txt.textContent = STORAGE_MODE==='cloud' ? '☁ Sauvegardé' : '💾 Sauvegardé';
+    txt.textContent = '☁ Synchronisé';
   } else {
     dot.className = 'autosave-dot error';
-    txt.textContent = '⚠ Erreur save';
+    txt.textContent = '⚠ Erreur sync';
   }
-  setTimeout(function(){ dot.className='autosave-dot'; txt.textContent='Sync'; }, 2500);
+  setTimeout(function(){ dot.className='autosave-dot'; txt.textContent='Firebase'; }, 2500);
 }
+
 function saveProducts()  { scheduleSave(KEYS.products,  PRODUCTS);  }
 function savePacks()     { scheduleSave(KEYS.packs,     PACKS);     }
 function saveEvents()    { scheduleSave(KEYS.events,    EVENTS);    }
@@ -889,8 +892,8 @@ function saveReports()   { scheduleSave(KEYS.reports,   REPORTS);   }
 function saveReviews()   { scheduleSave(KEYS.reviews,   REVIEWS);   }
 function saveBans()      { scheduleSave(KEYS.bans,      BANS);      }
 function saveProblems()  { scheduleSave(KEYS.problems,  PROBLEMS);  }
-function saveFavorites() { scheduleSave(KEYS.favorites, FAVORITES); }
-function savePurchased() { scheduleSave(KEYS.purchased, PURCHASED); }
+function saveFavorites() { scheduleSave(KEYS.favorites+'_'+USER_ID, FAVORITES); }
+function savePurchased() { scheduleSave(KEYS.purchased+'_'+USER_ID, PURCHASED); }
 
 // ─── BAN CHECK ───
 function checkBan() {
@@ -1385,7 +1388,7 @@ function saveProduct(id){
   editingId=null;window._editImgs=[];
   saveProducts();
   renderFilter();renderProducts();
-  showToast('✅ Produit sauvegardé !','var(--green)');
+  showToast('✅ Produit sauvegardé sur Firebase !','var(--green)');
   renderAdminProducts();
 }
 function cancelEdit(){editingId=null;window._editImgs=[];document.getElementById('edit-form-wrap').innerHTML='';rebuildProductList();}
@@ -1421,7 +1424,7 @@ function savePack(i){
   PACKS[i].savings=document.getElementById('pk-savings-'+i).value;
   PACKS[i].link=document.getElementById('pk-link-'+i).value;
   PACKS[i].items=document.getElementById('pk-items-'+i).value.split('\n').filter(Boolean);
-  savePacks();renderPacks();showToast('Pack sauvegardé !','var(--gold)');
+  savePacks();renderPacks();showToast('Pack sauvegardé sur Firebase !','var(--gold)');
 }
 
 // ─── ADMIN EVENTS ───
@@ -1519,7 +1522,7 @@ function renderAdminBans(){
       +'<div class="form-group" style="align-self:end;"><button class="btn-save" style="background:linear-gradient(135deg,var(--red),#cc1133);width:100%" onclick="addBan()">🚫 Bannir</button></div>'
     +'</div>'
   +'</div>'
-  +'<div style="font-size:12px;color:var(--text2);margin-bottom:12px;">'+active.length+' ban(s) actif(s) sur '+BANS.length+' total</div>'
+  +'<div style="font-size:12px;color:var(--text2);margin-bottom:12px;">'+active.length+' ban(s) actif(s) sur '+BANS.length+' total · Ton UID : <span style="color:var(--studio);font-family:monospace;font-size:11px">'+USER_ID+'</span></div>'
   +'<div class="ban-list">'
   +(!BANS.length?'<div class="no-items-msg">Aucun utilisateur banni</div>'
   :BANS.map(function(b,i){
@@ -1604,11 +1607,11 @@ function renderAdminSettings(){
       +'<div class="form-actions" style="margin-top:10px"><button class="btn-save" onclick="saveTopbar()">Appliquer</button></div>'
     +'</div>'
     +'<div class="settings-section">'
-      +'<div class="settings-title">☁ Mode de stockage actuel</div>'
-      +'<div style="font-size:13px;padding:10px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--surface2);font-family:Rajdhani,sans-serif;font-weight:700;">'
-        +(STORAGE_MODE==='cloud'
-          ?'<span style="color:var(--studio)">☁ Cloud (window.storage)</span> — Données synchronisées sur tous tes appareils via Claude.'
-          :'<span style="color:var(--gold)">💾 Local (localStorage)</span> — Données sauvegardées dans ce navigateur uniquement.')
+      +'<div class="settings-title">🔥 Firebase Firestore</div>'
+      +'<div style="font-size:13px;padding:10px 14px;border-radius:9px;border:1px solid rgba(255,162,0,.3);background:rgba(255,162,0,.06);font-family:Rajdhani,sans-serif;font-weight:700;">'
+        +(window._fbDb
+          ?'<span style="color:#FFA200">🔥 Connecté à Firebase Firestore</span><br><span style="color:var(--text2);font-weight:400;font-size:11px;">Projet : site-roblox-dc692 · Collection : rbxs_data</span>'
+          :'<span style="color:var(--red)">⚠ Firebase non connecté — mode local actif</span>')
       +'</div>'
     +'</div>'
     +'<div class="settings-section">'
@@ -1625,7 +1628,7 @@ function renderAdminSettings(){
       +'<div class="settings-title">🛠 Debug</div>'
       +'<div style="display:flex;gap:9px;flex-wrap:wrap;">'
         +'<button class="apr-btn apr-btn-edit" onclick="resetPurchases()">Effacer pass achetés</button>'
-        +'<button class="apr-btn apr-btn-del" onclick="resetAll()">⚠ Reset complet</button>'
+        +'<button class="apr-btn apr-btn-del" onclick="resetAll()">⚠ Reset complet Firebase</button>'
       +'</div>'
     +'</div>';
 }
@@ -1637,27 +1640,33 @@ async function saveSecuritySettings(){
   if(pin&&!/^\d{4}$/.test(pin)){showToast('PIN = 4 chiffres','var(--red)');return;}
   if(pwd){ADMIN_PASSWORD=pwd;await sSet(KEYS.adminPwd,pwd);}
   if(pin){ADMIN_PIN=pin;await sSet(KEYS.adminPin,pin);}
-  showToast('Sécurité mise à jour !','var(--green)');
+  showToast('Sécurité mise à jour sur Firebase !','var(--green)');
 }
 async function saveTopbar(){
   var tb=document.getElementById('set-topbar').value;
   if(tb){document.getElementById('topbar-el').textContent=tb;await sSet(KEYS.topbar,tb);}
   showToast('Bannière mise à jour !','var(--green)');
 }
-async function resetPurchases(){PURCHASED=[];await sSet(KEYS.purchased,[]);showToast('Pass effacés','var(--orange)');}
+async function resetPurchases(){
+  PURCHASED=[];
+  await sSet(KEYS.purchased+'_'+USER_ID,[]);
+  showToast('Pass effacés','var(--orange)');
+}
 async function resetAll(){
-  if(!confirm('Reset complet ? Toutes les données seront effacées !'))return;
-  var keys=Object.values(KEYS);
-  for(var i=0;i<keys.length;i++){
-    await sDelete(keys[i]);
+  if(!confirm('Reset complet Firebase ? Toutes les données seront effacées !'))return;
+  var allKeys=Object.values(KEYS);
+  for(var i=0;i<allKeys.length;i++){
+    await sDelete(allKeys[i]);
   }
-  showToast('Reset effectué, rechargement...','var(--red)');
+  // Supprimer aussi les clés par UID
+  await sDelete(KEYS.favorites+'_'+USER_ID);
+  await sDelete(KEYS.purchased+'_'+USER_ID);
+  showToast('Reset Firebase effectué, rechargement...','var(--red)');
   setTimeout(function(){location.reload();},1500);
 }
 
 // ─── INIT ───
 function initApp(){
-  updateStorageBadge();
   checkBan();
   updateFavCount();
   renderFilter();
@@ -1669,14 +1678,13 @@ function initApp(){
 
 // ─── DÉMARRAGE ───
 loadAllData().catch(function(err){
-  console.error('Erreur chargement:', err);
+  console.error('Erreur chargement Firebase:', err);
   PRODUCTS = DEFAULT_PRODUCTS.map(function(p){ return Object.assign({},p); });
   PACKS    = DEFAULT_PACKS.map(function(p){ return Object.assign({},p); });
   USER_ID  = 'user_fallback_' + Math.random().toString(36).substr(2,9);
-  STORAGE_MODE = 'local';
   hideLoading();
   initApp();
-  showToast('⚠ Données par défaut chargées','var(--orange)');
+  showToast('⚠ Firebase indisponible — données par défaut','var(--orange)');
 });
 </script>
 </body>
